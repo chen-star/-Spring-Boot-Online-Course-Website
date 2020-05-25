@@ -1,13 +1,8 @@
 package com.course.server.domain;
 
-/**
- * @author Alex CHEN
- * @version 1.0
- * @since 2020-05-23 23:00
- */
 public class Test {
-
     private String id;
+
     private String name;
 
     public String getId() {
@@ -15,7 +10,7 @@ public class Test {
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     public String getName() {
@@ -23,6 +18,18 @@ public class Test {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? null : name.trim();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", name=").append(name);
+        sb.append("]");
+        return sb.toString();
     }
 }
