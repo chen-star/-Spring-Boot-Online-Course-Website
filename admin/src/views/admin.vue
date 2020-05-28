@@ -363,20 +363,20 @@
                 </div><!-- /.sidebar-shortcuts -->
 
                 <ul class="nav nav-list">
-                    <li class="">
-                        <a href="index.html">
+                    <li class="" id="welcome-sidebar">
+                        <router-link to="/welcome">
                             <i class="menu-icon fa fa-tachometer"></i>
                             <span class="menu-text"> Welcome </span>
-                        </a>
+                        </router-link>
 
                         <b class="arrow"></b>
                     </li>
 
-                    <li class="active open">
+                    <li class="">
                         <a href="#" class="dropdown-toggle">
                             <i class="menu-icon fa fa-list"></i>
                             <span class="menu-text">
-								System Management
+								System Manage
 							</span>
 
                             <b class="arrow fa fa-angle-down"></b>
@@ -464,6 +464,30 @@
                         </ul>
                     </li>
 
+                    <li class="active open">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-list"></i>
+                            <span class="menu-text">
+								Business Manage
+							</span>
+
+                            <b class="arrow fa fa-angle-down"></b>
+                        </a>
+
+                        <b class="arrow"></b>
+
+                        <ul class="submenu">
+                            <li class="active" id="business-chapter-sidebar">
+                                <router-link to="/business/chapter">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    Chapter Management
+                                </router-link>
+
+                                <b class="arrow"></b>
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul><!-- /.nav-list -->
 
                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
@@ -513,7 +537,7 @@
                 </div>
             </div>
 
-            <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">f
                 <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
             </a>
         </div><!-- /.main-container -->
@@ -524,13 +548,38 @@
     export default {
         name: 'admin',
         mounted() {
+            let _this = this;
             $('body').removeClass('login-layout light-login');
             $('body').attr('class', 'no-skin');
             console.log('admin');
+            _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
+        },
+        watch: {
+            $route: {
+                handler: function(val, oldVal) {
+                    console.log("Page --->", val, oldVal);
+                    let _this = this;
+                    _this.$nextTick(function () {
+                        _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
+                    })
+                }
+            }
         },
         methods: {
             login () {
                 this.$router.push("/admin")
+            },
+
+            activeSidebar: function (id) {
+                $("#" + id).siblings().removeClass("active");
+                $("#" + id).siblings().find("li").removeClass("active");
+                $("#" + id).addClass("active");
+
+                let parentLi = $("#" + id).parents("li");
+                if (parentLi) {
+                    parentLi.siblings().removeClass("open active");
+                    parentLi.addClass("open active");
+                }
             }
         }
     }
