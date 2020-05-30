@@ -91,10 +91,13 @@
         methods: {
             list() {
                 let _this = this;
-                _this.$ajax.get('http://127.0.0.1:9000/business/admin/chapter/list')
+                _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/list', {
+                    page: 1,
+                    size: 1
+                })
                 .then((response)=>{
                     console.log("Chapter query result: ", response);
-                    _this.chapters = response.data;
+                    _this.chapters = response.data.list;
                 })
             }
         }
