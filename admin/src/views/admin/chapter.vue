@@ -1,12 +1,19 @@
 <template>
     <div>
         <p>
+            <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+                <i class="ace-icon fa fa-edit red2"></i>
+                Add
+            </button>
+            &nbsp;
             <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
                 <i class="ace-icon fa fa-refresh red2"></i>
                 Refresh
             </button>
         </p>
+
         <pagination ref="pagination" v-bind:list="list"></pagination>
+
         <table id="simple-table" class="table  table-bordered table-hover">
             <thead>
             <tr>
@@ -81,6 +88,35 @@
             </tr>
             </tbody>
         </table>
+
+        <div id="form-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Form</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input v-model="chapter.name" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Course ID</label>
+                                <input v-model="chapter.courseId" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Course ID">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button v-on:click="save()" type="button" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -91,6 +127,7 @@
         components: {Pagination},
         data: function () {
             return {
+                chapter: {},
                 chapters: []
             }
         },
@@ -100,6 +137,11 @@
             _this.list(1);
         },
         methods: {
+            add() {
+                let _this = this;
+                $("#form-modal").modal("show");
+            },
+
             list(page) {
                 let _this = this;
                 _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/list', {
@@ -107,11 +149,25 @@
                     size: _this.$refs.pagination.size,
                 })
                     .then((response) => {
-                        console.log("Chapter query result: ", response.data.total);
-                        _this.chapters = response.data.list;
-                        _this.$refs.pagination.render(page, response.data.total);
+                        console.log("Chapter query result: ", response);
+                        let resp = response.data;
+                        _this.chapters = resp.content.list;
+                        _this.$refs.pagination.render(page, resp.content.total);
                     })
-            }
+            },
+
+            save() {
+                let _this = this;
+                _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/save', _this.chapter)
+                    .then((response) => {
+                        console.log("Save chapter result: ", response);
+                        let resp = response.data;
+                        if (resp.success) {
+                            $("#form-modal").modal("hide");
+                            _this.list(1);
+                        }
+                    })
+            },
         }
     }
 </script>
