@@ -1,4 +1,4 @@
-package com.course.system.config;
+package com.course.business.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
@@ -14,15 +14,15 @@ import org.springframework.core.env.Environment;
 @EnableEurekaClient
 @ComponentScan("com.course")
 @MapperScan("com.course.server.mapper")
-public class SystemApplication {
+public class BusinessApplication {
 
-    private static final Logger lOG = LoggerFactory.getLogger(SystemApplication.class);
+    private static final Logger lOG = LoggerFactory.getLogger(BusinessApplication.class);
 
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(SystemApplication.class);
+        SpringApplication app = new SpringApplication(BusinessApplication.class);
         Environment env = app.run(args).getEnvironment();
         lOG.info("App Started!");
-        lOG.info("System address: \thttp://127.0.0.1:{}", env.getProperty("server.port"));
+        lOG.info("Business address: \thttp://127.0.0.1:{}", env.getProperty("server.port"));
     }
 
 }
