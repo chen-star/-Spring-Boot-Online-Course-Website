@@ -30,7 +30,7 @@ CREATE TABLE `section` (
                            `chapter_id` CHAR(8) COMMENT 'Chapter Id',
                            `video` VARCHAR(200) COMMENT 'Video',
                            `time` INT COMMENT 'Video length: s',
-                           `charge` CHAR(1) COMMENT 'C: Charge | F: Free',
+                           `charge` CHAR(1) COMMENT 'C/F',
                            `sort` INT COMMENT 'Sequence',
                            `created_at` DATETIME(3) COMMENT 'Create Time',
                            `updated_at` DATETIME(3) COMMENT 'Modify Time',

@@ -1,4 +1,4 @@
-package com.course.generator.server;
+package com.course.generator.vue;
 
 import com.course.generator.util.DbUtil;
 import com.course.generator.util.Field;
@@ -19,12 +19,10 @@ import java.util.Set;
  * @version 1.0
  * @since 2020-06-06 19:26
  */
-public class ServerGenerator {
+public class VueGenerator {
 
     static String MODULE = "business";
-    static String toDtoPath = "server/src/main/java/com/course/server/dto/";
-    static String toServicePath = "server/src/main/java/com/course/server/service/";
-    static String toControllerPath = MODULE + "/src/main/java/com/course/" + MODULE + "/controller/admin/";
+    static String toVuePath = "admin/src/views/admin/";
     static String generatorConfigPath = "server/src/main/resources/generator/generatorConfig.xml";
 
     public static void main(String[] args) throws Exception {
@@ -53,14 +51,8 @@ public class ServerGenerator {
         map.put("fieldList", fieldList);
         map.put("typeSet", typeSet);
 
-        FreemarkerUtil.initConfig("service.ftl");
-        FreemarkerUtil.generator(toServicePath + Domain + "Service.java", map);
-
-        FreemarkerUtil.initConfig("controller.ftl");
-        FreemarkerUtil.generator(toControllerPath + Domain + "Controller.java", map);
-
-        FreemarkerUtil.initConfig("dto.ftl");
-        FreemarkerUtil.generator(toDtoPath + Domain + "Dto.java", map);
+        FreemarkerUtil.initConfig("vue.ftl");
+        FreemarkerUtil.generator(toVuePath + domain + ".vue", map);
     }
 
     private static Set<String> getJavaTypes(List<Field> fieldList) {
