@@ -1,11 +1,18 @@
 package com.course.generator.server;
 
+import com.course.generator.util.DbUtil;
+import com.course.generator.util.Field;
 import com.course.generator.util.FreemarkerUtil;
-import freemarker.template.TemplateException;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Alex CHEN
@@ -14,20 +21,56 @@ import java.util.Map;
  */
 public class ServerGenerator {
 
+    static String MODULE = "business";
+    static String toDtoPath = "server/src/main/java/com/course/server/dto/";
     static String toServicePath = "server/src/main/java/com/course/server/service/";
-    static String toControllerPath = "business/src/main/java/com/course/business/controller/admin/";
+    static String toControllerPath = MODULE + "/src/main/java/com/course/" + MODULE + "/controller/admin/";
+    static String generatorConfigPath = "server/src/main/resources/generator/generatorConfig.xml";
 
-    public static void main(String[] args) throws IOException, TemplateException {
-        String Domain = "Section";
-        String domain = "section";
-        Map<String, String> map = new HashMap<>();
+    public static void main(String[] args) throws Exception {
+        String module = MODULE;
+
+        File file = new File(generatorConfigPath);
+        SAXReader reader = new SAXReader();
+        Document doc = reader.read(file);
+        Element rootElement = doc.getRootElement();
+        Element contextElement = rootElement.element("context");
+        Element tableElement;
+
+        tableElement = contextElement.elementIterator("table").next();
+        String Domain = tableElement.attributeValue("domainObjectName");
+        String tableName = tableElement.attributeValue("tableName");
+        String domain = Domain.substring(0, 1).toLowerCase() + Domain.substring(1);
+        System.out.println("Table: " + tableName);
+        System.out.println("Domain: " + Domain);
+
+//        String Domain = "Section";
+//        String domain = "section";
+        List<Field> fieldList = DbUtil.getColumnByTableName(tableName);
+        Set<String> typeSet = getJavaTypes(fieldList);
+        Map<String, Object> map = new HashMap<>();
         map.put("Domain", Domain);
         map.put("domain", domain);
+        map.put("module", module);
+        map.put("fieldList", fieldList);
+        map.put("typeSet", typeSet);
 
         FreemarkerUtil.initConfig("service.ftl");
         FreemarkerUtil.generator(toServicePath + Domain + "Service.java", map);
 
         FreemarkerUtil.initConfig("controller.ftl");
         FreemarkerUtil.generator(toControllerPath + Domain + "Controller.java", map);
+
+        FreemarkerUtil.initConfig("dto.ftl");
+        FreemarkerUtil.generator(toDtoPath + Domain + "Dto.java", map);
+    }
+
+    private static Set<String> getJavaTypes(List<Field> fieldList) {
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i < fieldList.size(); i++) {
+            Field field = fieldList.get(i);
+            set.add(field.getJavaType());
+        }
+        return set;
     }
 }

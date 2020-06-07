@@ -1,26 +1,61 @@
 package com.course.server.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class SectionDto {
+
+    /**
+     * ID
+     */
     private String id;
 
+    /**
+     * Title
+     */
     private String title;
 
+    /**
+     * Course Id
+     */
     private String courseId;
 
+    /**
+     * Chapter Id
+     */
     private String chapterId;
 
+    /**
+     * Video
+     */
     private String video;
 
+    /**
+     * Video length: s
+     */
     private Integer time;
 
+    /**
+     * C: Charge | F: Free
+     */
     private String charge;
 
+    /**
+     * Sequence
+     */
     private Integer sort;
 
+    /**
+     * Create Time
+     */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createdAt;
 
+    /**
+     * Modify Time
+     */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updatedAt;
 
     public String getId() {
@@ -28,7 +63,7 @@ public class SectionDto {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getTitle() {
@@ -36,7 +71,7 @@ public class SectionDto {
     }
 
     public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
+        this.title = title;
     }
 
     public String getCourseId() {
@@ -44,7 +79,7 @@ public class SectionDto {
     }
 
     public void setCourseId(String courseId) {
-        this.courseId = courseId == null ? null : courseId.trim();
+        this.courseId = courseId;
     }
 
     public String getChapterId() {
@@ -52,7 +87,7 @@ public class SectionDto {
     }
 
     public void setChapterId(String chapterId) {
-        this.chapterId = chapterId == null ? null : chapterId.trim();
+        this.chapterId = chapterId;
     }
 
     public String getVideo() {
@@ -60,7 +95,7 @@ public class SectionDto {
     }
 
     public void setVideo(String video) {
-        this.video = video == null ? null : video.trim();
+        this.video = video;
     }
 
     public Integer getTime() {
@@ -76,7 +111,7 @@ public class SectionDto {
     }
 
     public void setCharge(String charge) {
-        this.charge = charge == null ? null : charge.trim();
+        this.charge = charge;
     }
 
     public Integer getSort() {
@@ -103,6 +138,7 @@ public class SectionDto {
         this.updatedAt = updatedAt;
     }
 
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -122,4 +158,5 @@ public class SectionDto {
         sb.append("]");
         return sb.toString();
     }
+
 }

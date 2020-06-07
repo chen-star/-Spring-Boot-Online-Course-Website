@@ -28,7 +28,7 @@ public class FreemarkerUtil {
         template = configuration.getTemplate(ftlName);
     }
 
-    public static void generator(String fileName, Map<String, String> map) throws IOException, TemplateException {
+    public static void generator(String fileName, Map<String, Object> map) throws IOException, TemplateException {
         FileWriter fw = new FileWriter(fileName);
         BufferedWriter bw = new BufferedWriter(fw);
         template.process(map, bw);
