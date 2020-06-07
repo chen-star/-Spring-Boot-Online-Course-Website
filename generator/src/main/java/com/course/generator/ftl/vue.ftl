@@ -18,16 +18,20 @@
             <thead>
             <tr>
                 <#list fieldList as field>
+                    <#if field.nameHump!="createdAt" && field.nameHump!="updatedAt">
                 <th>${field.nameCn}</th>
+                    </#if>
             </#list>
-            <th>Operation</th>
+                <th>Operation</th>
             </tr>
             </thead>
 
             <tbody>
             <tr v-for="${domain} in ${domain}s">
                 <#list fieldList as field>
+                    <#if field.nameHump!="createdAt" && field.nameHump!="updatedAt">
                 <td>{{${domain}.${field.nameHump}}}</td>
+                    </#if>
             </#list>
 
             <td>
@@ -94,11 +98,13 @@
                     <div class="modal-body">
                         <form>
                             <#list fieldList as field>
+                                <#if field.nameHump!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt">
                             <div class="form-group">
                                 <label>${field.nameCn}</label>
                                 <input v-model="${domain}.${field.nameHump}" type="text" class="form-control"
                                        aria-describedby="emailHelp">
                             </div>
+                                </#if>
                         </#list>
                         </form>
                     </div>
@@ -165,6 +171,19 @@
                 let _this = this;
 
                 // Validation
+                if (1 != 1
+                <#list fieldList as field>
+                    <#if field.nameHump!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt" && field.nameHump!="sort">
+                    <#if !field.nullAble>
+                 || !Validator.require(_this.${domain}.${field.nameHump}, "${field.nameCn}")
+                    </#if>
+                    <#if (field.length > 0)>
+                 || !Validator.length(_this.${domain}.${field.nameHump}, "${field.nameCn}", 1, ${field.length})
+                    </#if>
+                    </#if>
+                </#list>) {
+                    return;
+                }
 
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/${module}/admin/${domain}/save', _this.${domain})

@@ -9,6 +9,9 @@ Validator = {
     },
 
     length: function (value, text, min, max) {
+        if (Tool.isEmpty(text)) {
+            return true;
+        }
         if (!Tool.isLength(value, min, max)) {
             Toast.warning(text + " length " + min + "~" + max);
             return false;

@@ -45,6 +45,9 @@ public class SectionController {
         LOG.info("sectionDto: {}", sectionDto);
 
         // validate
+        ValidatorUtil.require(sectionDto.getTitle(), "Title");
+        ValidatorUtil.length(sectionDto.getTitle(), "Title", 1, 50);
+        ValidatorUtil.length(sectionDto.getVideo(), "Video", 1, 200);
 
         ResponseDto responseDto = new ResponseDto();
         sectionService.save(sectionDto);

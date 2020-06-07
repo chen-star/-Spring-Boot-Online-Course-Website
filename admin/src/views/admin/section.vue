@@ -17,7 +17,7 @@
         <table id="simple-table" class="table  table-bordered table-hover">
             <thead>
             <tr>
-                                <th>ID</th>
+                <th>ID</th>
                 <th>Title</th>
                 <th>Course Id</th>
                 <th>Chapter Id</th>
@@ -25,9 +25,7 @@
                 <th>Video length: s</th>
                 <th>C/F</th>
                 <th>Sequence</th>
-                <th>Create Time</th>
-                <th>Modify Time</th>
-            <th>Operation</th>
+                <th>Operation</th>
             </tr>
             </thead>
 
@@ -41,57 +39,55 @@
                 <td>{{section.time}}</td>
                 <td>{{section.charge}}</td>
                 <td>{{section.sort}}</td>
-                <td>{{section.createdAt}}</td>
-                <td>{{section.updatedAt}}</td>
 
-            <td>
-                <div class="hidden-sm hidden-xs btn-group">
+                <td>
+                    <div class="hidden-sm hidden-xs btn-group">
 
-                    <button v-on:click="edit(section)" class="btn btn-xs btn-info">
-                        <i class="ace-icon fa fa-pencil bigger-120"></i>
-                    </button>
-
-                    <button v-on:click="del(section.id)" class="btn btn-xs btn-danger">
-                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                    </button>
-
-                </div>
-
-                <div class="hidden-md hidden-lg">
-                    <div class="inline pos-rel">
-                        <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown"
-                                data-position="auto">
-                            <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                        <button v-on:click="edit(section)" class="btn btn-xs btn-info">
+                            <i class="ace-icon fa fa-pencil bigger-120"></i>
                         </button>
 
-                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                            <li>
-                                <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+                        <button v-on:click="del(section.id)" class="btn btn-xs btn-danger">
+                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                        </button>
+
+                    </div>
+
+                    <div class="hidden-md hidden-lg">
+                        <div class="inline pos-rel">
+                            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown"
+                                    data-position="auto">
+                                <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                            </button>
+
+                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                <li>
+                                    <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
 																			<span class="blue">
 																				<i class="ace-icon fa fa-search-plus bigger-120"></i>
 																			</span>
-                                </a>
-                            </li>
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                <li>
+                                    <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
 																			<span class="green">
 																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																			</span>
-                                </a>
-                            </li>
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                <li>
+                                    <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
 																			<span class="red">
 																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																			</span>
-                                </a>
-                            </li>
-                        </ul>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </td>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -107,11 +103,6 @@
                     </div>
                     <div class="modal-body">
                         <form>
-                            <div class="form-group">
-                                <label>ID</label>
-                                <input v-model="section.id" type="text" class="form-control"
-                                       aria-describedby="emailHelp">
-                            </div>
                             <div class="form-group">
                                 <label>Title</label>
                                 <input v-model="section.title" type="text" class="form-control"
@@ -147,16 +138,6 @@
                                 <input v-model="section.sort" type="text" class="form-control"
                                        aria-describedby="emailHelp">
                             </div>
-                            <div class="form-group">
-                                <label>Create Time</label>
-                                <input v-model="section.createdAt" type="text" class="form-control"
-                                       aria-describedby="emailHelp">
-                            </div>
-                            <div class="form-group">
-                                <label>Modify Time</label>
-                                <input v-model="section.updatedAt" type="text" class="form-control"
-                                       aria-describedby="emailHelp">
-                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -177,12 +158,11 @@
         components: {Pagination},
         data: function () {
             return {
-            section:
-            {
+                section:
+                    {}
+                ,
+                sections: []
             }
-        ,
-            sections: []
-        }
         },
         mounted() {
             //this.$parent.activeSidebar("business-section-sidebar");
@@ -222,21 +202,28 @@
                 let _this = this;
 
                 // Validation
+                if (1 != 1
+                    || !Validator.require(_this.section.title, "Title")
+                    || !Validator.length(_this.section.title, "Title", 1, 50)
+                    || !Validator.length(_this.section.video, "Video", 1, 200)
+                ) {
+                    return;
+                }
 
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save', _this.section)
-            .then((response) => {
-                    Loading.hide();
-                    //console.log("Save section result: ", response);
-                    let resp = response.data;
-                    if (resp.success) {
-                        $("#form-modal").modal("hide");
-                        _this.list(1);
-                        Toast.success("Save success");
-                    } else {
-                        Toast.warning(resp.message);
-                    }
-                })
+                    .then((response) => {
+                        Loading.hide();
+                        //console.log("Save section result: ", response);
+                        let resp = response.data;
+                        if (resp.success) {
+                            $("#form-modal").modal("hide");
+                            _this.list(1);
+                            Toast.success("Save success");
+                        } else {
+                            Toast.warning(resp.message);
+                        }
+                    })
             },
 
             del(id) {

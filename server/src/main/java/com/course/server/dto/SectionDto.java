@@ -1,8 +1,7 @@
 package com.course.server.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class SectionDto {
 
@@ -37,7 +36,7 @@ public class SectionDto {
     private Integer time;
 
     /**
-     * C: Charge | F: Free
+     * C/F
      */
     private String charge;
 
