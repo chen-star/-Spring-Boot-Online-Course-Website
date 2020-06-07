@@ -63,6 +63,6 @@ public class SectionService {
     }
 
     public void delete(String id) {
-        SectionMapper.deleteByPrimaryKey(id);
+        sectionMapper.deleteByPrimaryKey(id);
     }
 }
